@@ -18,6 +18,7 @@ Patch1:        spock-0.7-core-port-to-groovy2.4.8.patch
 Patch100:      spock-0.7-gradle-use-local-repo.patch
 
 BuildRequires: gradle #gradle-local
+BuildRequires: maven-local
 BuildRequires: apache-parent
 
 BuildRequires: ant
