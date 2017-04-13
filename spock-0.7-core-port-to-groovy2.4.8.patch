@@ -1,0 +1,14 @@
+diff -Nru spock-spock-0.7-groovy-2.0/spock-core/src/main/java/org/spockframework/runtime/ConfigurationScriptLoader.java spock-spock-0.7-groovy-2.0.groovy/spock-core/src/main/java/org/spockframework/runtime/ConfigurationScriptLoader.java
+--- spock-spock-0.7-groovy-2.0/spock-core/src/main/java/org/spockframework/runtime/ConfigurationScriptLoader.java	2012-10-08 10:20:19.000000000 +0200
++++ spock-spock-0.7-groovy-2.0.groovy/spock-core/src/main/java/org/spockframework/runtime/ConfigurationScriptLoader.java	2017-02-08 12:55:54.575765927 +0100
+@@ -126,8 +126,8 @@
+     GroovyShell shell = createShell();
+     try {
+       return (DelegatingScript) shell.parse(new GroovyCodeSource(url));
+-    } catch (IOException e) {
+-      throw new ConfigurationException("Error reading configuration script '%s'", location);
++    //} catch (IOException e) {
++    //  throw new ConfigurationException("Error reading configuration script '%s'", location);
+     } catch (CompilationFailedException e) {
+       throw new ConfigurationException("Error compiling configuration script '%s'", location);
+     }

@@ -1,0 +1,10 @@
+--- spock-spock-0.7-groovy-2.0/build.gradle.local
++++ spock-spock-0.7-groovy-2.0/build.gradle
+@@ -33,6 +33,7 @@
+   sourceCompatibility = 1.5
+ 
+   repositories {
++    xmvn()
+     mavenCentral()
+     maven { url "http://snapshots.repository.codehaus.org" }
+   }
