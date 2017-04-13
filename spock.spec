@@ -58,7 +58,7 @@ testing Guice 2/3 based applications.
 %prep
 %setup -q -n %{name}-%{name}-%{namedversion}
 %patch0 -p1
-%patch1 -p1
+#patch1 -p1
 #patch100 -p1 -b .local
 find . -name "*.class" -delete
 find . -name "*.jar" -delete
