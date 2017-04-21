@@ -11,13 +11,11 @@ Group:         Development/Java
 License:       ASL 2.0
 URL:           https://github.com/spockframework/spock
 Source0:       https://github.com/spockframework/spock/archive/%{name}-%{namedversion}.tar.gz
-Source100:     https://repo1.maven.org/maven2/org/spockframework/%{name}-core/%{namedversion}/%{name}-core-%{namedversion}.pom
-Source101:     https://repo1.maven.org/maven2/org/spockframework/%{name}-guice/%{namedversion}/%{name}-guice-%{namedversion}.pom
 Patch0:        0001-Build-with-Gradle-local-mode.patch
 Patch1:        spock-0.7-core-port-to-groovy2.4.8.patch
 Patch100:      spock-0.7-gradle-use-local-repo.patch
 
-BuildRequires: gradle #gradle-local
+BuildRequires: gradle-local
 BuildRequires: maven-local
 BuildRequires: apache-parent
 
@@ -58,8 +56,8 @@ testing Guice 2/3 based applications.
 %prep
 %setup -q -n %{name}-%{name}-%{namedversion}
 %patch0 -p1
-#patch1 -p1
-#patch100 -p1 -b .local
+%patch1 -p1
+%patch100 -p1 -b .local
 find . -name "*.class" -delete
 find . -name "*.jar" -delete
 
@@ -72,25 +70,16 @@ rm -rf spock-maven spock-specs spock-spring spock-tapestry spock-unitils
 # fix name in build script
 sed -i "s|version = \"%{namedversion}\"|version = \"%{version}%{nameddottag}\"|" build.gradle
 
-# add maven
-cp %{SOURCE100} pom-%{name}-core.xml
-cp %{SOURCE101} pom-%{name}-guice.xml
-%pom_xpath_replace "pom:project/pom:version" "<version>%{version}%{nameddottag}</version>" ./pom-%{name}-core.xml
-%pom_xpath_replace "pom:project/pom:version" "<version>%{version}%{nameddottag}</version>" ./pom-%{name}-guice.xml
-%pom_xpath_replace "pom:dependency[pom:artifactId[./text()='spock-core']]/pom:version" "
-<version>\${project.version}</version>" ./pom-%{name}-guice.xml
-%pom_change_dep :junit-dep :junit ./pom-%{name}-core.xml
-
 %build
 
 # install task used for generate pom files
 #%gradle_build -s -- -x javadoc
-gradle build -s -x javadoc -x test -Dfile.encoding=UTF-8 -Dproject.rootProject=%{version}%{nameddottag}
+gradle build install --offline -s -x javadoc -x test -Dfile.encoding=UTF-8 -Dproject.rootProject=%{version}%{nameddottag}
 
 %install
 %mvn_package ':%{name}-{*}' @1
-%mvn_artifact pom-%{name}-core.xml %{name}-core/build/libs/%{name}-core-%{version}%{nameddottag}.jar
-%mvn_artifact pom-%{name}-guice.xml %{name}-guice/build/libs/%{name}-guice-%{version}%{nameddottag}.jar
+%mvn_artifact %{name}-core/build/poms/pom-default.xml %{name}-core/build/libs/%{name}-core-%{version}%{nameddottag}.jar
+%mvn_artifact %{name}-guice/build/poms/pom-default.xml %{name}-guice/build/libs/%{name}-guice-%{version}%{nameddottag}.jar
 %mvn_install
 
 %files core -f .mfiles-core
